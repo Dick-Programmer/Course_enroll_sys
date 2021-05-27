@@ -1,0 +1,128 @@
+{% extends "student/student-base.html" %}
+
+{% block content %}
+    <section id="main-content">
+        <div class="row">
+            <div class="col-md-12">
+                <ul class="breadcrumb">
+                    <li>{{ seme.semester }}</li>
+                    <li>{{ seme.weeks }}</li>
+                </ul>
+            </div>
+        </div>
+        <!-- <div class="col-md-6">
+            <div class="panel panel-solid-info">
+                <div class="panel-heading">
+                    <h3 class="panel-title">天气</h3>
+                    <div class="actions pull-right">
+                        <i class="fa fa-chevron-down"></i>
+                    </div>
+                </div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h3 class="text-center small-thin uppercase">今天</h3>
+                            <div class="text-center">
+                                <canvas id="clear-day" width="110" height="110"></canvas>
+                                <h4>32°C</h4>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <h3 class="text-center small-thin uppercase">今晚</h3>
+                            <div class="text-center">
+                                <canvas id="partly-cloudy-night" width="110" height="110"></canvas>
+                                <h4>26°C</h4>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel-footer">
+                    <div class="row">
+                        <div class="col-md-2">
+                            <h6 class="text-center small-thin uppercase">Mon</h6>
+                            <div class="text-center">
+                                <canvas id="partly-cloudy-day" width="32" height="32"></canvas>
+                                <span>33°C</span>
+                            </div>
+                        </div>
+
+                        <div class="col-md-2">
+                            <h6 class="text-center small-thin uppercase">Mon</h6>
+                            <div class="text-center">
+                                <canvas id="rain" width="32" height="32"></canvas>
+                                <span>36°C</span>
+                            </div>
+                        </div>
+
+                        <div class="col-md-2">
+                            <h6 class="text-center small-thin uppercase">Tue</h6>
+                            <div class="text-center">
+                                <canvas id="sleet" width="32" height="32"></canvas>
+                                <span>32°C</span>
+                            </div>
+                        </div>
+
+                        <div class="col-md-2">
+                            <h6 class="text-center small-thin uppercase">Wed</h6>
+                            <div class="text-center">
+                                <canvas id="snow" width="32" height="32"></canvas>
+                                <span>28°C</span>
+                            </div>
+                        </div>
+
+                        <div class="col-md-2">
+                            <h6 class="text-center small-thin uppercase">Thu</h6>
+                            <div class="text-center">
+                                <canvas id="wind" width="32" height="32"></canvas>
+                                <span>40°C</span>
+                            </div>
+                        </div>
+
+                        <div class="col-md-2">
+                            <h6 class="text-center small-thin uppercase">Fri</h6>
+                            <div class="text-center">
+                                <canvas id="fog" width="32" height="32"></canvas>
+                                <span>42°C</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div> -->
+        <div class="col-md-6 col-sm-12" id="view-mail-wrapper">
+            <div class="panel">
+                <div class="panel-body">
+                    <header>
+                        <h2>通知</h2>
+                        <p class="pull-right">Today, {{ date }}</p>
+                    </header>
+                    {% for v in inf %}
+                    <div class="row view-mail-header">
+                        <div class="col-md-12 ">
+                            <strong><a href="{{ url_for('student.informdetail',name = v.title) }}">{{ v.title }}</a></strong>
+                            {% autoescape false %}
+                            <p style="color: white">{{ v.preview }}</p>
+                            {% endautoescape %}
+                            <p class="pull-right" style="color: rgb(153, 151, 151)">{{ v.gh }} / {{ v.time }}</p>
+                        </div>
+                    </div>
+                    <hr>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}
+
+{% block js %}
+    <script src="{{ url_for('static',filename='plugins/weather/js/skycons.js') }}"></script>
+    <script src="{{ url_for('static',filename='plugins/countTo/jquery.countTo.js') }}"></script>
+    <script>
+        $(document).ready(function () {
+            app.timer();
+            app.map();
+            app.weather();
+            app.morrisPie();
+        });
+    </script>
+{% endblock %}

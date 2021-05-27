@@ -1,0 +1,109 @@
+{% extends "teacher/teacher-base.html" %}
+{% block css %}
+<link rel="stylesheet" href="{{ url_for('static',filename='plugins/dataTables/css/dataTables.css') }}">
+{% endblock %}
+
+{% block content %}
+    <section id="main-content">
+        <div class="row">
+            <div class="col-md-12">
+                <ul class="breadcrumb">
+                    <li>{{ seme.semester }}</li>
+                    <li>{{ seme.weeks }}</li>
+                </ul>
+                <h2 class="h2">申请开课</h2>
+            </div>
+        </div>
+        {% for msg in get_flashed_messages() %}
+        <!-- category_filter=["ok"] -->
+        <script>
+            alert("{{msg}}")
+        </script>
+        {% endfor %}
+        <div class="row">
+            <div class="col-md-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">课程申请信息</h3>
+                    </div>
+                    <div class="panel-body">
+                        <form class="bs-example bs-example-form" role="form" method="POST">
+                            <table id="table" class="table table-striped">
+                                <thead>
+                                <tr>
+                                    <th>{{ form.name.label }}</th>
+                                    <th>{{ form.credit.label }}</th>
+                                    <th>{{ form.period.label }}</th>
+                                    <th>{{ form.psrate.label }}</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>{{ form.name }}</td>
+                                        <td>{{ form.credit }}</td>
+                                        <td>{{ form.period }}</td>
+                                        <td>{{ form.psrate }}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            {{ form.describe.label }}
+                            {{ form.describe }}
+                            <div style = "text-align:right;padding-right:15px" >
+                                {{ form.submit}}
+                                {{ form.csrf_token }}
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">我的申请</h3>
+                    </div>
+                    <div class="panel-body">
+                        <form class="bs-example bs-example-form" role="form" method="POST">
+                            <table id="table" class="table table-striped">
+                                <thead>
+                                <tr>
+                                    <th>课程名</th>
+                                    <th>学分</th>
+                                    <th>学时</th>
+                                    <th>平时分占比</th>
+                                    <th>课程描述</th>
+                                    <th>状态</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                    {% for v in myapply %}
+                                    <tr>
+                                        <td>{{ v.name }}</td>
+                                        <td>{{ v.credit }}</td>
+                                        <td>{{ v.period }}</td>
+                                        <td>{{ v.psrate }}</td>
+                                        <td width="45%">{{ v.detail }}</td>
+                                        <td>
+                                            {% if v.status==0 %}
+                                            <p>等待审批</p>
+                                            {% elif v.status==1 or v.status==3 %}
+                                            <strong style="color:springgreen;">已批准</strong>
+                                            {% else %}
+                                            <strong style="color:tomato;">已拒绝</strong>
+                                            {% endif %}
+                                        </td>
+                                    </tr>                                    
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}
+
+{% block js %}
+{% endblock %}

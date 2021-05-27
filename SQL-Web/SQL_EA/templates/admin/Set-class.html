@@ -1,0 +1,214 @@
+{% extends "admin/admin-base.html" %}
+{% import "UI/Twopages1.html" as pg %}
+{% import "UI/Twopages2.html" as pg2 %}
+
+{% block css %}
+<link rel="stylesheet" href="{{ url_for('static',filename='plugins/dataTables/css/dataTables.css') }}">
+{% endblock %}
+
+{% block content %}
+    <section id="main-content">
+        <div class="row">
+            <div class="col-md-12">
+                <ul class="breadcrumb">
+                    <li>{{ seme.semester }}</li>
+                    <li>{{ seme.weeks }}</li>
+                </ul>
+                <h2 class="h2">课程信息</h2>
+            </div>
+        </div>
+        {% for msg in get_flashed_messages() %}
+        <!-- category_filter=["ok"] -->
+        <script>
+            alert("{{msg}}")
+        </script>
+        {% endfor %}
+        <div class="row">
+            <div class="col-md-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">课程管理</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="tab-wrapper tab-primary">
+                            <ul class="nav nav-tabs">
+                                <li class="active"><a href="#course" data-toggle="tab">课程库</a>
+                                </li>
+                                <li><a href="#class" data-toggle="tab">已开设课程</a>
+                                </li>
+                            </ul>
+                            <div class="tab-content">
+                                <div class="tab-pane active" id="course">
+                                    <table id="table" class="table table-striped">
+                                        <thead>
+                                        <tr>
+                                            <th>课号</th>
+                                            <th>课名</th>
+                                            <th>学分</th>
+                                            <th>学时</th>
+                                            <th>所属院系号</th>
+                                            <th>操作</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {{ xzero() }}
+                                        {% for v in page_data.items %}
+                                            <tr>
+                                                <td>{{ v.kh }}</td>
+                                                <td>{{ v.name }}</td>
+                                                <td>{{ v.credit }}</td>
+                                                <td>{{ v.period }}</td>
+                                                <td>{{ v.yxh }}</td>
+                                                <td>
+                                                    <a href="{{ url_for('admin.coursedel',kh = v.kh) }}"  onclick="delete_confirm" class="label label-danger" style="color: white;border:0;">删除</a>
+                                                </td>
+                                            </tr>
+                                        {{ xadd() }}
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+                                    <div class="dataTables_paginate">
+                                        {{ pg.pages(page_data, 'admin.classsetting') }}
+                                    </div>
+                                </div>
+                                <div class="tab-pane" id="class">
+                                    <table id="table" class="table table-striped">
+                                        <thead>
+                                        <tr>
+                                            <th>学期</th>
+                                            <th>课号</th>
+                                            <th>工号</th>
+                                            <th>上课时间</th>
+                                            <th>容量</th>
+                                            <th>当前人数</th>
+                                            <th>操作</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {{ xzero() }}
+                                        {% for v in page_data2.items %}
+                                            <tr>
+                                                <td>{{ v.semester }}</td>
+                                                <td>{{ v.kh }}</td>
+                                                <td>{{ v.gh }}</td>
+                                                <td>{{ v.class_time }}</td>
+                                                <td>{{ v.maxsize }}</td>
+                                                <td>{{ v.nowsize }}</td>
+                                                <td>
+                                                    <a href="{{ url_for('admin.classdel',gh = v.gh, kh = v.kh, semester = v.semester) }}"  onclick="delete_confirm" class="label label-danger" style="color: white;border:0;">删除</a>
+                                                </td>
+                                            </tr>
+                                        {{ xadd() }}
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+                                    <div class="dataTables_paginate">
+                                        {{ pg2.pages(page_data2, 'admin.classsetting') }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">添加课程入库</h3>
+                        <div class="actions pull-right">
+                            <i class="fa fa-chevron-down"></i>
+                        </div>
+                    </div>
+                    <div class="panel-body">
+                        <div class="panel-body">
+                            <form class="bs-example bs-example-form" role="form" method="POST">
+                                <table id="table" class="table table-striped">
+                                    <thead>
+                                    <tr>
+                                        <th>{{ form.kh.label }}</th>
+                                        <th>{{ form.name.label }}</th>
+                                        <th>{{ form.credit.label }}</th>
+                                        <th>{{ form.period.label }}</th>
+                                        <th>{{ form.pjrate.label }}</th>
+                                        <th>{{ form.yxh.label }}</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>{{ form.kh }}</td>
+                                            <td>{{ form.name }}</td>
+                                            <td>{{ form.credit }}</td>
+                                            <td>{{ form.period }}</td>
+                                            <td>{{ form.pjrate }}</td>
+                                            <td>{{ form.yxh }}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <div style = "text-align:right;padding-right:15px" >
+                                    {{ form.submit }}
+                                    {{ form.csrf_token }}
+                                </div>
+                            </form>
+                        </div>    
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">开设课程</h3>
+                        <div class="actions pull-right">
+                            <i class="fa fa-chevron-down"></i>
+                        </div>
+                    </div>
+                    <div class="panel-body">
+                        <div class="panel-body">
+                            <form class="bs-example bs-example-form" role="form" method="POST">
+                                <table id="table" class="table table-striped">
+                                    <thead>
+                                    <tr>
+                                        <th>{{ form2.semester.label }}</th>
+                                        <th>{{ form2.kh.label }}</th>
+                                        <th>{{ form2.gh.label }}</th>
+                                        <th>{{ form2.time.label }}</th>
+                                        <th>{{ form2.maxsize.label }}</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>{{ form2.semester }}</td>
+                                            <td>{{ form2.kh }}</td>
+                                            <td>{{ form2.gh }}</td>
+                                            <td>{{ form2.time }}</td>
+                                            <td>{{ form2.maxsize }}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <div style = "text-align:right;padding-right:15px" >
+                                    {{ form2.submit }}
+                                    {{ form2.csrf_token }}
+                                </div>
+                            </form>
+                        </div>    
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}
+
+{% block js %}
+    <script>
+        document.onclick = function delete_confirm() 
+        {
+            if (event.srcElement.outerText == "删除") 
+            {
+                event.returnValue = confirm("删除后数据无法撤销，你确认要删除吗？");
+            }
+        }
+    </script>
+{% endblock %}

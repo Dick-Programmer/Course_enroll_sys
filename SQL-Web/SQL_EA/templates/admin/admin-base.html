@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html class="no-js">
+<!--<![endif]-->
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>教学事务管理系统</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+    <!-- Bootstrap CSS -->
+    <!-- <link rel="stylesheet" href="//cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap.min.css"> -->
+    <link rel="stylesheet" href="{{ url_for('static',filename='plugins/bootstrap/css/bootstrap.min.css') }}">
+    <!-- <script src="//cdn.bootcss.com/jquery/1.11.3/jquery.min.js"></script> -->
+    <script src="{{ url_for('static',filename='js/jquery-1.10.2.min.js') }}"></script>
+    <!-- <script src="//cdn.bootcss.com/bootstrap/3.3.5/js/bootstrap.min.js"></script> -->
+    <script src="{{ url_for('static',filename='plugins/bootstrap/js/bootstrap.min.js') }}"></script>
+    <script src="{{ url_for('static',filename='js/application.js') }}"></script>
+    <!-- Fonts from Font Awsome -->
+    <link rel="stylesheet" href="{{ url_for('static',filename='css/font-awesome/css/font-awesome.min.css') }}">
+    <!-- CSS Animate -->
+    <link rel="stylesheet" href="{{ url_for('static',filename='css/animate.css') }}">
+    <!-- Custom styles for this theme -->
+    <link rel="stylesheet" href="{{ url_for('static',filename='css/main.css') }}">
+    <!-- Drop-down -->
+    <link rel="stylesheet" href="{{ url_for('static',filename='css/drop-down.css') }}" />
+    <!-- Pagelevel CSS -->
+    {% block css %}
+    {% endblock %}
+    <!-- Feature detection -->
+    <script src="{{ url_for('static',filename='js/modernizr-2.6.2.min.js') }}"></script>
+
+</head>
+
+<body>
+<section id="container">
+    <header id="header">
+        <!--logo start-->
+        <div class="brand">
+            <a href="{{ url_for('admin.index') }}" class="logo">
+                <span>教务管理系统</span></a>
+        </div>
+        <!--logo end-->
+        <div class="toggle-navigation toggle-left">
+            <button type="button" class="btn btn-default" id="toggle-left" data-toggle="tooltip" data-placement="right" title="隐藏侧边栏">
+                <i class="fa fa-bars"></i>
+            </button>
+        </div>
+        <div class="user-nav">
+            <ul>
+                <li class="dropdown messages">
+                    {% if apc.undo!=0 %}
+                    <span class="badge badge-danager animated bounceIn" id="new-messages">{{ apc.undo }}</span>
+                    {% endif %}
+                    <button type="button" class="btn btn-default dropdown-toggle options" id="toggle-mail"
+                            data-toggle="dropdown">
+                        <i class="fa fa-envelope"></i>
+                    </button>
+                    <ul class="dropdown-menu alert animated fadeInDown">
+                        <li>
+                            <h1>你有
+                                <strong> {{ apc.undo }} </strong>条未处理申请！</h1>
+                        </li>
+                        {% for v in apc.apc %}
+                        <li>
+                            {% if v.ApplyCourse.status==0 %}
+                            <a href="{{ url_for('admin.applydetail',gh = v.ApplyCourse.gh,name= v.ApplyCourse.name) }}">
+                                <div class="profile-photo">
+                                    {% if v.Teacher.sex == "女" %}
+                                    <img src="{{ url_for('static',filename='img/userwoman.png') }}" alt="" class="img-circle" height="50px">
+                                    {% else %}
+                                    <img src="{{ url_for('static',filename='img/userman.png') }}" alt="" class="img-circle" height="50px">
+                                    {% endif %} 
+                                </div>
+                                <div class="message-info">
+                                    <span class="sender">{{ v.Teacher.name }}</span>
+                                    <span class="time"> {{ v.ApplyCourse.time }}</span>
+                                    <div class="message-content">{{ v.ApplyCourse.name }}</div>
+                                </div>
+                            </a>
+                            {% endif %}
+                        </li>
+                        {% endfor %}
+                        <li><a href="{{ url_for('admin.applyforcourse') }}">查看所有消息</a>
+                        </li>
+                    </ul>
+                </li>
+
+                <li class="profile-photo">
+                    <img src="{{ url_for('static',filename='img/admin.png') }}" alt="" class="img-circle" height="30px">
+                </li>
+                <li class="dropdown settings">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                        您好，{{ username }}<i class="fa fa-angle-down"></i>
+                    </a>
+                    <ul class="dropdown-menu animated fadeInDown">
+                        <li>
+                            <a href="{{ url_for('admin.settings') }}"><i class="fa fa-cog fa-fw"></i> 设&emsp;&emsp;置 </a>
+                        </li>
+                        <li>
+                            <a href="{{ url_for('admin.applyforcourse') }}"><i class="fa fa-envelope fa-fw"></i> 消&emsp;&emsp;息 
+                            {% if apc.undo!=0 %}
+                            <span class="badge badge-danager" id="user-inbox"> {{ apc.undo }} </span></a>
+                            {% endif %}
+                        </li>
+                        <li>
+                            <a href="{{ url_for('admin.logout') }}"><i class="fa fa-power-off fa-fw"></i> 注&emsp;&emsp;销
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <img src="{{ url_for('static',filename='img/sun.gif') }}" alt="" height="40px">
+                </li>
+            </ul>
+        </div>
+    </header>
+    <!--sidebar start-->
+    <aside class="sidebar">
+        <div id="leftside-navigation" class="nano">
+            <ul class="nano-content">
+                <li class="sub-menu active">
+                    <a href="{{ url_for('admin.index') }}"><span>首页</span></a>
+                </li>
+                <li class="sub-menu">
+                    <a href="javascript:void(0);"><span>管理信息</span><i
+                            class="arrow fa fa-angle-right pull-right"></i></a>
+                    <ul>
+                        <li><a href="{{ url_for('admin.collegesetting',page = 1) }}">学院</a>
+                        </li>
+                        <li><a href="{{ url_for('admin.teachersetting',page = 1) }}">教师</a>
+                        </li>
+                        <li><a href="{{ url_for('admin.studentsetting',page = 1) }}">学生</a>
+                        </li>
+                        <li><a href="{{ url_for('admin.semestersetting') }}">学期</a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="sub-menu">
+                    <a href="javascript:void(0);"><span>选课管理</span><i class="arrow fa fa-angle-right pull-right"></i></a>
+                    <ul>
+                        <li><a href="{{ url_for('admin.classsetting',page = 1, page2 = 1) }}">课程</a>
+                        </li>
+                        <li><a href="{{ url_for('admin.selectCsetting',page = 1) }}">选课</a>
+                        </li>
+                        <li><a href="{{ url_for('admin.setselectCtime') }}">选课时间</a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="sub-menu">
+                    <a href="javascript:void(0);"><span>通知管理</span>
+                        <i class="arrow fa fa-angle-right pull-right"></i></a>
+                    <ul>
+                        <li><a href="{{ url_for('admin.informedit') }}">发布通知</a>
+                        </li>
+                        <li><a href="{{ url_for('admin.historicinform') }}">历史通知</a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="sub-menu">
+                    <a href="javascript:void(0);"><span>待定</span><i class="arrow fa fa-angle-right pull-right"></i></a>
+                    <ul>
+                        <li><a href="#">待定</a>
+                        </li>
+                        <li><a href="#">待定</a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+
+    </aside>
+    <!--sidebar end-->
+    <!--main content start-->
+    <section class="main-content-wrapper">
+        {% block content %}
+        {% endblock %}
+    </section>
+    <!--main content end-->
+
+</section>
+<!--Global JS-->
+<script src="{{ url_for('static',filename='plugins/waypoints/waypoints.min.js') }}"></script>
+<script src="{{ url_for('static',filename='js/jquery-ui.min.js') }}"></script>
+<script src="{{ url_for('static',filename='js/select-widget-min.js') }}"></script>
+<!-- Morris  -->
+<script src="{{ url_for('static',filename='plugins/morris/js/morris.min.js') }}"></script>
+<script src="{{ url_for('static',filename='plugins/morris/js/raphael.2.1.0.min.js') }}"></script>
+<!-- Vector Map  -->
+<script src="{{ url_for('static',filename='plugins/jvectormap/js/jquery-jvectormap-1.2.2.min.js') }}"></script>
+<script src="{{ url_for('static',filename='plugins/jvectormap/js/jquery-jvectormap-world-mill-en.js') }}"></script>
+<!-- ToDo List  -->
+<script src="{{ url_for('static',filename='plugins/todo/js/todos.js') }}"></script>
+<!--Load these page level functions-->
+<script src="{{ url_for('static',filename='plugins/dataTables/js/jquery.dataTables.js') }}"></script>
+<!--Page Level JS-->
+{% block js %}
+{% endblock %}
+<script type="text/javascript">
+    $(document).ready(function(){		
+        $(".ui-select").selectWidget({
+            change       : function (changes) {
+                return changes;
+            },
+            effect       : "slide",
+            keyControl   : true,
+            speed        : 200,
+            scrollHeight : 250
+        });
+        
+    });		
+</script>
+
+</body>
+</html>

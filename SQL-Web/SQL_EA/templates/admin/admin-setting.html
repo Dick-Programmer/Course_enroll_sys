@@ -1,0 +1,55 @@
+{% extends "admin/admin-base.html" %}
+
+{% block content %}
+    <section id="main-content">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">设置</h3>
+                        <div class="actions pull-right">
+                            <i class="fa fa-chevron-down"></i>
+                        </div>
+                    </div>
+                    {% for msg in get_flashed_messages() %}
+                    <!-- category_filter=["ok"] -->
+                    <script>
+                        alert("{{msg}}")
+                    </script>
+                    {% endfor %}
+                    <div class="panel-body">
+                        <div class="panel-heading">
+                            <h4 class="panel-title">修改密码</h4>
+                            <div class="panel-body">
+                                <form class="bs-example bs-example-form" role="form" method="POST">
+                                    <div class="input-group">
+                                        <p>{{ form.oldpwd.label }}</p>
+                                        {{ form.oldpwd }}
+                                    </div>
+                                    <div class="input-group">
+                                        <p>{{ form.pwd.label }}</p>
+                                        {{ form.pwd }}
+                                    </div>
+                                    <div class="input-group">
+                                        <p>{{ form.cfpwd.label }}</p>
+                                        {{ form.cfpwd }}
+                                    </div>
+                                    {% for err in form.cfpwd.errors %}
+                                    <div class="col-md-12">
+                                        <p style="color: red">{{ err }}</p>
+                                    </div>
+                                    {% endfor %}
+                                    <div style="margin-top:40px;">
+                                        {{ form.submit }}
+                                        {{ form.csrf_token }}
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        <hr>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}

@@ -1,0 +1,91 @@
+{% extends "teacher/teacher-base.html" %}
+{% import "UI/pages.html" as pg %}
+
+{% block css %}
+<link rel="stylesheet" href="{{ url_for('static',filename='plugins/dataTables/css/dataTables.css') }}">
+{% endblock %}
+
+{% block content %}
+    <section id="main-content">
+        <div class="row">
+            <div class="col-md-12">
+                <ul class="breadcrumb">
+                    <li>{{ seme.semester }}</li>
+                    <li>{{ seme.weeks }}</li>
+                </ul>
+                <h2 class="h2">课程信息</h2>
+            </div>
+        </div>
+        {% for msg in get_flashed_messages() %}
+        <!-- category_filter=["ok"] -->
+        <script>
+            alert("{{msg}}")
+        </script>
+        {% endfor %}
+        <div class="row">
+            <div class="col-md-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">已开课程</h3>
+                    </div>
+                    <div class="panel-body">
+                        <form class="bs-example bs-example-form" role="form" method="POST">
+                            <table>
+                                <td>{{ form.semester.label }}</td>
+                                <td>{{ form.semester }}</td>
+                                <td>&emsp;&emsp;&emsp;&emsp;</td>
+                                <td>
+                                    {{ form.submit}}
+                                    {{ form.csrf_token }}
+                                </td>
+                            </table>
+                        </form>
+                        <table id="table" class="table table-striped">
+                            <thead>
+                            <tr>
+                                <th>学期</th>
+                                <th>课号</th>
+                                <th>课名</th>
+                                <th>学分</th>
+                                <th>学时</th>
+                                <th>人数</th>
+                                <th>操作</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for v in page_data.items %}
+                                <tr>
+                                    <td>{{ v.Class.semester }}</td>
+                                    <td>{{ v.Class.kh }}</td>
+                                    <td>{{ v.Course.name }}</td>
+                                    <td>{{ v.Course.credit }}</td>
+                                    <td>{{ v.Course.period }}</td>
+                                    <td>{{ v.Class.nowsize }}</td>
+                                    <td>
+                                        <a href="{{ url_for('teacher.classdetail',kh = v.Class.kh, semes = v.Class.semester) }}"  onclick="delete_confirm" class="label label-info" style="color: white;border:0;">详情</a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                        <div class="dataTables_paginate">
+                            {{ pg.pages(page_data, 'teacher.myclass') }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}
+
+{% block js %}
+    <script>
+        document.onclick = function delete_confirm() 
+        {
+            if (event.srcElement.outerText == "删除") 
+            {
+                event.returnValue = confirm("删除后数据无法撤销，你确认要删除吗？");
+            }
+        }
+    </script>
+{% endblock %}

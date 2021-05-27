@@ -1,0 +1,131 @@
+{% extends "student/student-base.html" %}
+
+{% block content %}
+    <section id="main-content">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">个人信息</h3>
+                        <div class="actions pull-right">
+                            <i class="fa fa-chevron-down"></i>
+                        </div>
+                    </div>
+                    {% for msg in get_flashed_messages() %}
+                    <!-- category_filter=["ok"] -->
+                    <script>
+                        alert("{{msg}}")
+                    </script>
+                    {% endfor %}
+                    <div class="panel-body">
+                        <form class="bs-example bs-example-form" role="form" method="POST">
+                            <div class="input-group">
+                                <p>学号：</p>
+                                {{ form.xh }}
+                            </div>
+                            {% for err in form.xh.errors %}
+                                <div class="col-md-12">
+                                    <p style="color: red">{{ err }}</p>
+                                </div>
+                            {% endfor %}
+                            <div class="input-group">
+                                <p>姓名：</p>
+                                {{ form.name }}
+                            </div>
+                            {% for err in form.name.errors %}
+                                <div class="col-md-12">
+                                    <p style="color: red">{{ err }}</p>
+                                </div>
+                            {% endfor %}
+                            <div class="input-group">
+                                <p>性别：</p>
+                                {{ form.sex }}
+                            </div>
+                            {% for err in form.sex.errors %}
+                                <div class="col-md-12">
+                                    <p style="color: red">{{ err }}</p>
+                                </div>
+                            {% endfor %}
+                            <div class="input-group">
+                                <p>生日：</p>
+                                {{ form.birthday }}
+                            </div>
+                            {% for err in form.birthday.errors %}
+                                <div class="col-md-12">
+                                    <p style="color: red">{{ err }}</p>
+                                </div>
+                            {% endfor %}
+                            <div class="input-group">
+                                <p>籍贯：</p>
+                                {{ form.hometown }}
+                            </div>
+                            {% for err in form.hometown.errors %}
+                                <div class="col-md-12">
+                                    <p style="color: red">{{ err }}</p>
+                                </div>
+                            {% endfor %}
+                            <div class="input-group">
+                                <p>手机号码：</p>
+                                {{ form.mp_no }}
+                            </div>
+                            {% for err in form.mp_no.errors %}
+                                <div class="col-md-12">
+                                    <p style="color: red">{{ err }}</p>
+                                </div>
+                            {% endfor %}
+                            <div class="input-group">
+                                <p>学院：</p>
+                                {{ form.college }}
+                            </div>
+                            {% for err in form.college.errors %}
+                                <div class="col-md-12">
+                                    <p style="color: red">{{ err }}</p>
+                                </div>
+                            {% endfor %}
+                            <div style="margin-top:40px;">
+                                {{ form.submit }}
+                                {{ form.csrf_token }}
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">设置</h3>
+                        <div class="actions pull-right">
+                            <i class="fa fa-chevron-down"></i>
+                        </div>
+                    </div>
+                    <div class="panel-body">
+                        <div class="panel-heading">
+                            <h4 class="panel-title">修改密码</h4>
+                            <div class="panel-body">
+                                <form class="bs-example bs-example-form" role="form" method="POST">
+                                    <div class="input-group">
+                                        <p>{{ form2.oldpwd.label }}</p>
+                                        {{ form2.oldpwd }}
+                                    </div>
+                                    <div class="input-group">
+                                        <p>{{ form2.pwd.label }}</p>
+                                        {{ form2.pwd }}
+                                    </div>
+                                    <div class="input-group">
+                                        <p>{{ form2.cfpwd.label }}</p>
+                                        {{ form2.cfpwd }}
+                                    </div>
+                                    <div style="margin-top:40px;">
+                                        {{ form2.submit }}
+                                        {{ form2.csrf_token }}
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        <hr>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}

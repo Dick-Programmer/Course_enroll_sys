@@ -1,0 +1,654 @@
+/*-----------------------------------------------------------------------------------*/
+/*	1.	CSS 重置
+/*-----------------------------------------------------------------------------------*/
+
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed, 
+figure, figcaption, footer, header, hgroup, 
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+	font: inherit;
+	vertical-align: baseline;
+}
+
+/* HTML5 旧浏览器的显示角色重置 */
+article, aside, details, figcaption, figure, 
+footer, header, hgroup, menu, nav, section {
+	display: block;
+}
+
+body {
+	line-height: 1;
+}
+
+ol, ul {
+	list-style: none;
+}
+
+blockquote, q {
+	quotes: none;
+}
+
+blockquote:before, blockquote:after,
+q:before, q:after {
+	content: '';
+	content: none;
+}
+
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+
+input,textarea {
+	font: 12px/20px;	
+	font:inherit;
+	resize:none;
+}
+
+
+/*-----------------------------------------------------------------------------------*/
+/*	2.	文档设定 (body, common classes, structure etc)
+/*-----------------------------------------------------------------------------------*/
+
+
+body {
+	font: 12px/20px;
+	background:#efefef;
+	margin:0;
+	padding:0;
+	color:#686868;
+}
+
+#wrapper {
+	margin:0 auto;
+	background:#fff;
+}
+
+a {
+	text-decoration:none;
+	color:#000;
+	-webkit-transition:color 0.2s linear;
+    -moz-transition:color 0.2s linear;
+    -o-transition:color 0.2s linear;
+    transition:color 0.2s linear;
+}
+
+a:focus , a:link, a:active {
+	outline:none;
+}
+
+a:hover {
+	color:#BD0D0D;
+}
+
+p {
+	margin-bottom:20px;
+}
+
+.clear {
+	clear:both;
+}
+
+.aligncenter {
+	text-align:center;
+}
+
+.alignleft {
+	text-align:left;
+}
+
+.alignright {
+	text-align:right;
+}
+ 
+.space {
+    height:60px;
+    width:100%;
+	clear:both;
+}
+
+label {
+    color:#7F7F7F;
+    display:block;
+    font-weight:normal;
+}
+
+label.error {
+    color: red;
+    font-style: italic;
+    margin: 5px 0 10px 0;
+}
+
+input[type="text"], input[type="password"], input.text, input.title, textarea, select {
+    background:#FFFFFF;
+    border:1px solid #EBEBEB;
+}
+
+input[type="text"]:focus, input[type="password"]:focus, input.text:focus, input.title:focus, textarea:focus, select:focus {
+    -moz-box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.3);
+    -webkit-box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.3);
+    border:1px solid #EBEBEB;
+    box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.3);
+}
+
+input[type="text"], input[type="password"], input.text, input.title, textarea, select {
+    font-family:Arial;
+    font-size:12px;
+    margin:5px 0;
+}
+
+input.text, input.title, select {
+    padding:5%;
+    width:89%;
+}
+
+input.title {
+    font-size:13px;
+}
+
+textarea {
+    height:130px;
+    padding:2% 2%;
+    width:95.5%;
+}
+
+form.inline {
+}
+
+form.inline p {
+    margin-bottom:0;
+}
+
+.preloader { 
+	/* background:url(images/nivo-preloaders.gif) center center no-repeat #ffffff; */
+	display:inline-block;  
+}
+
+/*-----------------------------------------------------------------------------------*/
+/*	3.	列
+/*-----------------------------------------------------------------------------------*/
+
+.one-half { width: 460px }
+.one-third { width: 300px; }
+.two-third { width: 620px; }
+.one-fourth { width: 220px; }
+.three-fourth { width:700px; }
+.one-sixth { width: 140px; }
+.five-sixth { width: 780px }
+
+.one-fourth, .one-half, .two-third, .one-third, .three-fourth, .one-sixth, .five-sixth {
+	position: relative;
+	margin-right:20px;
+	float: left;	
+}
+
+.percent-one-half { width: 48%; }
+.percent-one-third { width: 30.66%; }
+.percent-two-third { width: 65.33%; }
+.percent-one-fourth { width: 22%; }
+.percent-three-fourth { width: 74%; }
+.percent-one-fifth { width: 16.8%; }
+.percent-two-fifth { width: 37.6%; }
+.percent-three-fifth { width: 58.4%; }
+.percent-four-fifth { width: 67.2%; }
+.percent-one-sixth { width: 13.33%; }
+.percent-five-sixth { width: 82.67%; }
+
+.percent-one-half,
+.percent-one-third,
+.percent-two-third,
+.percent-three-fourth,
+.percent-one-fourth,
+.percent-one-fifth,
+.percent-two-fifth,
+.percent-three-fifth,
+.percent-four-fifth,
+.percent-one-sixth,
+.percent-five-sixth {
+	position: relative;
+	margin-right: 4%;
+	float: left;
+}
+
+.column-right {
+	float:right;
+}
+.column-last {
+	margin-right: 0!important;
+	clear: right;
+}
+
+
+
+/*-----------------------------------------------------------------------------------*/
+/*	4.	头部
+/*-----------------------------------------------------------------------------------*/
+
+#header {
+	width:940px;
+	margin:0 auto;
+}
+
+.logo {
+	position:relative;
+	height:80px;
+}
+
+.logo img {
+	display:block;
+	position:absolute;
+	bottom:0;
+}
+
+#navigation {
+	float:right;
+	margin-top:45px;
+}
+
+ul#mainnav {
+	float:left;
+	position:relative;
+	display:block;
+}
+
+ul#mainnav li {
+	display:inline;
+	font-size:14px;
+	margin-left:20px;
+	float:left;
+	position:relative;
+}
+
+ul#mainnav li ul{
+	position: absolute;
+	padding-top: 0em;
+	display:none;
+	z-index:2	/* 防止被挡 */
+}
+
+ul#mainnav li:hover ul{
+	display:block;
+}
+
+ul#mainnav li a {
+	position:relative;
+	color:#323232;
+	padding:0 15px;
+	height:36px;
+	line-height:40px;
+	display:inline-block;
+	background:#fff;
+	-webkit-transition:background 0.2s linear;
+    -moz-transition:background 0.2s linear;
+    -o-transition:background 0.2s linear;
+    transition:background 0.2s linear;
+}
+
+ul#mainnav li a:active, ul#mainnav li a:hover , ul#mainnav li a.current{
+	background:#323232;
+	color:#fff;
+	text-decoration:none;
+}
+
+
+/*-----------------------------------------------------------------------------------*/
+/*	5.	主要内容
+/*-----------------------------------------------------------------------------------*/
+
+.intro {
+	position:relative;
+	padding-top:60px;
+}
+
+.services {
+	overflow:hidden;
+}
+
+h2.intro-text {
+	text-align:center;
+}
+
+h2.intro-text a {
+	color:#fff;
+	background:#222;
+	padding:3px 7px 1px;
+}
+
+h2.intro-text a:hover {
+	color:#fff;
+	background:#000;
+	padding:3px 7px 1px;
+}
+
+.centered-wrapper {
+	width:940px;
+	margin:0 auto;
+}
+
+.page-title {
+	width:940px;
+	margin:0 auto;
+	clear:both;
+	margin-bottom:50px;
+	padding-top:50px;
+}
+
+.page-title .double-separator {
+	margin:0;
+}
+
+.breadcrumbs {
+	font-size:12px;
+	padding:10px 0;
+	width:100%;
+	overflow:hidden;
+}
+
+.service-item {
+	text-align:center;
+	overflow:hidden;
+}
+
+.img-srv {
+	width:50px;
+	height:auto;
+	opacity:0.6;
+	margin:20px;
+}
+
+img.service-img {
+	float:left;
+	margin:0 20px 20px 0;
+	width:60px;
+	height:auto;
+}
+
+img.service-img-center {
+	text-align:center;
+	margin:0 0 20px 0;
+	width:60px;
+	height:auto;
+}
+
+h3.service {
+	line-height:32px;
+}
+
+.separator {
+	width:100%;
+	height:1px;
+	clear:both;
+	background:#efefef;
+	margin:40px 0;
+}
+
+.double-separator {
+	width:100%;
+	height:1px;
+	clear:both;
+	border-top:1px solid #efefef;
+	border-bottom:1px solid #efefef;
+	margin:40px 0;
+}
+
+#footer .double-separator {
+	margin:50px 0;
+}
+
+h2.bgtitle {
+	font-size:14px;
+	float:left;
+	background:#000;
+	color:#fff;
+	height:25px;
+	line-height:26px;
+	padding:0 5px;
+	margin-bottom:20px;
+}
+
+.team-member {
+    border-bottom:1px solid #efefef;
+    margin-bottom:60px;
+    padding-bottom:40px;
+    position:relative;
+}
+
+.team-details {
+    float:left;
+    margin-right:20px;
+    width:110px;
+}
+
+.team-avatar {
+    float:left;
+    height:110px;
+    padding-bottom:5px;
+    width:110px;
+}
+
+.team-social {
+    margin-bottom:10px;
+}
+
+.team-social a img {
+    -moz-transition: all .2s ease-in-out;
+    -o-transition: color .2s ease-in-out, opacity .2s ease-in-out, border-color .3s ease-in-out;
+    -webkit-transition: all .2s ease-in-out;
+    opacity: .3;
+    transition: all .2s ease-in-out;
+}
+
+.team-social a img:hover{
+    opacity: 1;
+}
+
+.team-twitter, .team-facebook, .team-linkedin {
+    float:left;
+    padding:0 6px;
+	margin-top:5px;
+}
+
+.team-text span {
+    color:#787878;
+}
+
+.team-text p {
+    margin-top:10px;
+}
+
+
+/*---  Nivo Slider ---*/
+.nivo {
+	height:400px;
+	clear:both;
+	padding-top:50px;
+}
+
+#slider {
+	width:940px;
+	height:400px;
+	display: block;
+	clear: left;
+	position: absolute;
+	top: 0px;
+	left: 50%;
+	margin-left: -960px;
+	background:#000 url(../img/nivo-preloader.gif) no-repeat 50% 50%;
+}
+
+.nivoSlider {
+	position:absolute;
+	width: 940px;
+	
+}
+
+.nivoSlider img {
+	position:relative;
+	top:0px;
+	left:-320px;
+}
+
+.nivoSlider a {
+	border:0;
+}
+
+.nivo-controlNav {
+	position:absolute;
+	height:7px;
+	width:940px;
+	background:#5c5c5c;
+	margin-top:393px;
+	z-index:8;
+}
+
+.nivo-wrapper {
+	width: 940px;
+	margin: 0 auto;
+	overflow: hidden;
+}
+
+.nivo-controlNav a {
+	display:block;
+	width:188px;
+	height:7px;
+	float:left;
+	background:#5c5c5c;
+	text-indent:-9999px;
+	cursor:pointer;
+	position:relative;
+	z-index:9;
+	-webkit-transition: background 0.2s linear;
+}
+
+.nivo-controlNav a.active {
+	background:#000;
+}
+
+.nivo-controlNav a:hover {
+	background:#000;
+}
+
+.nivo-directionNav {
+	width:940px;
+	margin:0 auto;
+	position:relative;
+	z-index:50;
+	cursor:pointer;
+}
+
+.nivo-directionNav a {
+	display:block;
+	width:57px;
+	height:57px;
+	background:url(../img/arrows.png) no-repeat;
+	text-indent:-9999px;
+	border:0;
+	position:absolute;
+	top:183px;
+	z-index: 10;
+	opacity:0.9;
+}
+
+.nivo-directionNav a:hover {
+	opacity:1;
+}
+
+a.nivo-nextNav {
+	background-position:-57px 0;
+	right:15px;
+}
+
+a.nivo-prevNav {
+	left:15px;
+}
+
+/* 如果图像被包装在一个链接中 */
+.nivoSlider a.nivo-imageLink {
+	position:absolute;
+	top:0px;
+	left:0px;
+	width:100%;
+	height:100%;
+	border:0;
+	padding:0;
+	margin:0;
+	z-index:6;
+	display:none;
+}
+
+/* 滑块中的切片和框 */
+.nivo-slice {
+	display:block;
+	position:absolute;
+	z-index:5;
+	height:100%;
+}
+
+.nivo-box {
+	display:block;
+	position:absolute;
+	z-index:5;
+	height:100%;
+}
+
+.nivo-caption {
+	position:absolute;
+	left:50%;
+	margin-left:-185px;
+	background:#000;
+	color:#fff;
+	opacity:0.8; 	/* 通过标题不透明设置覆盖 */
+	width:340px;
+	height:auto;
+	z-index:11;
+	bottom:20px;
+	padding:10px 15px 10px 20px;
+}
+
+.caption-bg {
+	background: url(../img/caption-bg.png) no-repeat scroll bottom center;
+	width:375px;
+	height:14px;
+	position:absolute;
+	bottom: -14px;
+	left: 0;
+}
+
+.nivo-caption h1 {
+	font-size:20px;
+	color:#fff;
+	margin:0;
+	height:32px;
+	line-height:32px;
+}
+
+.nivo-caption p {
+	padding:5px 0;
+	margin:0;
+	color:#d4d4d4;
+}
+
+.nivo-caption a {
+	color:#fff;
+}
+
+.nivo-caption a:hover {
+	color:#bd0d0d;
+}
+
+.nivo-html-caption {
+    display:none;
+}

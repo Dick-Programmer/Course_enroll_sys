@@ -1,0 +1,128 @@
+{% extends "admin/admin-base.html" %}
+
+{% block css %}
+{% endblock %}
+
+{% block content %}
+    <section id="main-content">
+        <div class="row">
+            <div class="col-md-12">
+                <ul class="breadcrumb">
+                    <li>{{ seme.semester }}</li>
+                    <li>{{ seme.weeks }}</li>
+                </ul>
+            </div>
+        </div>
+        {% for msg in get_flashed_messages() %}
+        <!-- category_filter=["ok"] -->
+        <script>
+            alert("{{msg}}")
+        </script>
+        {% endfor %}
+        <div class="col-md-12" id="view-mail-wrapper">
+                <div class="panel">
+                    <div class="panel-body">
+                        <header>
+                            <h2>{{ apcde.ApplyCourse.name }}</h2>
+                            <p class="pull-right">{{ apcde.ApplyCourse.time }}</p>
+                        </header>
+                        <div class="row view-mail-header">
+                            <div class="col-md-10">
+                                {% if apcde.Teacher.sex == "女" %}
+                                <img src="{{ url_for('static',filename='img/userwoman.png') }}" alt="" class="img-circle" height="50px">
+                                {% else %}
+                                <img src="{{ url_for('static',filename='img/userman.png') }}" alt="" class="img-circle" height="50px">
+                                {% endif %} 
+                                <strong style="font-size:20px"><a>{{ apcde.Teacher.name }}</a></strong>
+                                工号：<span style="color: rgb(178, 26, 238)">{{ apcde.Teacher.gh }}</span> Apply for <a>Course</a>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="view-mail-reply pull-right">
+                                    {% if apcde.ApplyCourse.status==0 %}
+                                    <a href="{{ url_for('admin.applyignore', gh=apcde.ApplyCourse.gh,name=apcde.ApplyCourse.name) }}" class="btn btn-sm btn-warning" style="color: white">
+                                        <i class="fa fa-trash"></i> Ignore
+                                    </a>
+                                    {% elif apcde.ApplyCourse.status==1 or apcde.ApplyCourse.status==3 %}
+                                    <strong style="color:springgreen;">已批准</strong>
+                                    {% else %}
+                                    <strong style="color:tomato;">已拒绝</strong>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="panel view-mail-body">
+                                    <div class="panel-body">
+                                        <table id="table" class="table table-striped">
+                                            <thead>
+                                            <tr>
+                                                <th>课程名</th>
+                                                <th>学分</th>
+                                                <th>学时</th>
+                                                <th>平时分占比</th>
+                                                <th>所属学院</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>{{ apcde.ApplyCourse.name }}</td>
+                                                    <td>{{ apcde.ApplyCourse.credit }}</td>
+                                                    <td>{{ apcde.ApplyCourse.period }}</td>
+                                                    <td>{{ apcde.ApplyCourse.psrate }}</td>
+                                                    <td>{{ apcde.ApplyCourse.yxh }}</td>
+                                                </tr>                                    
+                                            </tbody>
+                                        </table>
+                                        <strong>课程描述：</strong>
+                                        {{ apcde.ApplyCourse.detail }}
+                                    </div>
+                                    {% if apcde.ApplyCourse.status==0 %}
+                                    <div class="panel-footer pull-right">
+                                        <table>
+                                            <td>&emsp;&emsp;&emsp;&emsp;</td>
+                                            <td><strong>添加课程号：</strong></td>
+                                            <td><input id="inputkh" type="text" class="form-control" style="width: 200px"></td>
+                                            <td>&emsp;&emsp;&emsp;&emsp;</td>
+                                            <td><button  onclick="allowcommit('{{apcde.ApplyCourse.gh}}','{{apcde.ApplyCourse.name}}')" class="btn  btn-primary">批准添加</button></td>
+                                        </table>
+                                    </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    </section>
+{% endblock %}
+
+{% block js %}
+<script>
+    function allowcommit(gh,name){
+        kh = document.getElementById("inputkh").value;
+        $.ajax({
+            url : "{{ url_for('admin.applyallow') }}",
+            type: "POST",
+            data: JSON.stringify({
+                "kh": kh,
+                "gh": gh,
+                "name": name,
+            }),
+            contentType: "application/json",
+            dataType: "json",
+            success: function(data){
+                var result = data.result
+                if (result != 'SUCC'){
+                    if(result == 'ERR1')
+                        confirm("课号主键重复，添加失败！")
+                    else
+                        confirm("修改失败！请重试")
+                } 
+                else
+                    confirm("添加成功！")
+            }
+        })
+    }
+</script>
+{% endblock %}

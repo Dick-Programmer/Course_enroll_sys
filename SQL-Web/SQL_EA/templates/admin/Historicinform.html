@@ -1,0 +1,52 @@
+{% extends "admin/admin-base.html" %}
+
+{% block css %}
+{% endblock %}
+
+{% block content %}
+    <section id="main-content">
+        <div class="row">
+            <div class="col-md-12">
+                <ul class="breadcrumb">
+                    <li>{{ seme.semester }}</li>
+                    <li>{{ seme.weeks }}</li>
+                </ul>
+            </div>
+        </div>
+        {% for msg in get_flashed_messages() %}
+        <!-- category_filter=["ok"] -->
+        <script>
+            alert("{{msg}}")
+        </script>
+        {% endfor %}
+        <div class="row">
+            {{ xzero() }}
+            {% for v in inf %}
+            <div class="col-md-12">
+                <a href="{{ url_for('admin.informdetail',name = v.title) }}">
+                <div class="{{ panel[getx()] }}">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">{{ v.title }}</h3>
+                    </div>
+                    <div class="panel-body">
+                        {% autoescape false %}
+                        {{ v.preview }}
+                        {% endautoescape %}
+                    </div>
+                    <div class="panel-footer">{{ v.gh }} / {{ v.time }}</div>
+                </div>
+                </a>
+            </div>
+            {{ xadd() }}
+            {% if getx() > 4 %}
+            {{ xzero() }}
+            {% endif %}
+            {% endfor %}
+        </div>
+    </section>
+{% endblock %}
+
+{% block js %}
+    <script src="{{ url_for('static',filename='plugins/bootstrap-wysihtml5/js/wysihtml5-0.3.0.js') }}"></script>
+    <script src="{{ url_for('static',filename='plugins/bootstrap-wysihtml5/js/bootstrap3-wysihtml5.js') }}"></script>
+{% endblock %}

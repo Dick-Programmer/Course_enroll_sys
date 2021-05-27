@@ -1,0 +1,119 @@
+{% extends "student/student-base.html" %}
+{% import "UI/pages.html" as pg %}
+
+{% block css %}
+    <link rel="stylesheet" href="{{ url_for('static',filename='plugins/dataTables/css/dataTables.css') }}">
+{% endblock %}
+
+{% block content %}
+    <section id="main-content">
+        <div class="row">
+            <div class="col-md-12">
+                <ul class="breadcrumb">
+                    <li>{{ seme.semester }}</li>
+                    <li>{{ seme.weeks }}</li>
+                </ul>
+                <h2 class="h2">成绩详情</h2>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-8">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">成绩</h3>
+                    </div>
+                    <div class="panel-body">
+                        <form class="bs-example bs-example-form" role="form" method="POST">
+                            <table>
+                                <td>{{ form.semester.label }}</td>
+                                <td>{{ form.semester }}</td>
+                                <td>&emsp;&emsp;&emsp;&emsp;</td>
+                                <td>
+                                    {{ form.submit}}
+                                    {{ form.csrf_token }}
+                                </td>
+                            </table>
+                        </form>
+                        <table id="table" class="table table-striped">
+                            <thead>
+                            <tr>
+                                <th>学期</th>
+                                <th>课程</th>
+                                <th>教师</th>
+                                <th>平时成绩</th>
+                                <th>考试成绩</th>
+                                <th>总评成绩</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for v in page_data.items %}
+                                <tr>
+                                    <td>{{ v.SelectC.semester }}</td>
+                                    <td>{{ v.Course.name }}</td>
+                                    <td>{{ v.Teacher.name }}</td>
+                                    <td>{{ v.SelectC.pscj }}</td>
+                                    <td>{{ v.SelectC.kscj }}</td>
+                                    <td>{{ v.SelectC.zpcj }}</td>
+                                </tr>
+                                </tbody>
+                            {% endfor %}
+                        </table>
+                        <div>
+                            <p>学分：{{pj.credit}}&emsp;平均成绩：{{pj.grade}}</p>
+                        </div>
+                        <div class="dataTables_paginate">
+                            {{ pg.pages(page_data, 'student.Gradedetail') }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- <div class="col-md-4">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Polar Area</h3>
+                        <div class="actions pull-right">
+                            <i class="fa fa-chevron-down"></i>
+                            <i class="fa fa-times"></i>
+                        </div>
+                    </div>
+                    <div class="panel-body text-center">
+                        <canvas id="polarArea" height="300"></canvas>
+                    </div>
+                </div>
+            </div> -->
+        </div>
+    </section>
+{% endblock %}
+
+{% block js %}
+    <script src="{{ url_for('static',filename='plugins/dataTables/js/jquery.dataTables.js') }}"></script>
+    <script src="{{ url_for('static',filename='plugins/dataTables/js/dataTables.bootstrap.js') }}"></script>
+    <script src="{{ url_for('static',filename='plugins/chartjs/Chart.min.js') }}"></script>
+    <script src="{{ url_for('static',filename='plugins/chartjs/chartjs-demo.js') }}"></script>
+    <script>
+        var colorlist = ["#D97041","#C7604C", "#21323D","#9D9B7F","#7D4F6D","#584A5E"];
+        var table = document.getElementById("table");
+        var chartData = [
+			{
+				value : 0,
+				color: "#D97041"
+			}];
+        for(var i=1;i<table.rows.length;i++)
+        {
+            text = table.rows[i].cells[5].innerHTML;
+            if(text!="None"){
+                var a ={
+                    value : parseInt(text),
+                    color: colorlist[i]
+                }
+                chartData.push(a)
+            }
+        }     
+        // chartData.push({
+        //             value : 100,
+        //             color: "#FFFFFF"
+        //         })   
+        var myPolarArea = new Chart(document.getElementById("polarArea").getContext("2d")).PolarArea(chartData);
+    </script>
+{% endblock %}

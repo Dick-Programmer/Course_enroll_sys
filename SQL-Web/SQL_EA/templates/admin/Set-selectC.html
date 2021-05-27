@@ -1,0 +1,116 @@
+{% extends "admin/admin-base.html" %}
+{% import "UI/pages.html" as pg %}
+
+{% block css %}
+<link rel="stylesheet" href="{{ url_for('static',filename='plugins/dataTables/css/dataTables.css') }}">
+{% endblock %}
+
+{% block content %}
+    <section id="main-content">
+        <div class="row">
+            <div class="col-md-12">
+                <ul class="breadcrumb">
+                    <li>{{ seme.semester }}</li>
+                    <li>{{ seme.weeks }}</li>
+                </ul>
+                <h2 class="h2">选课信息</h2>
+            </div>
+        </div>
+        {% for msg in get_flashed_messages() %}
+        <!-- category_filter=["ok"] -->
+        <script>
+            alert("{{msg}}")
+        </script>
+        {% endfor %}
+        <div class="row">
+            <div class="col-md-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">选课表</h3>
+                    </div>
+                    <div class="panel-body">
+                        <table id="table" class="table table-striped">
+                            <thead>
+                            <tr>
+                                <th>学号</th>
+                                <th>课号</th>
+                                <th>工号</th>
+                                <th>学期</th>
+                                <th>操作</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {{ xzero() }}
+                            {% for v in page_data.items %}
+                                <tr>
+                                    <td>{{ v.xh }}</td>
+                                    <td>{{ v.kh }}</td>
+                                    <td>{{ v.gh }}</td>
+                                    <td>{{ v.semester }}</td>
+                                    <td>
+                                        <a href="{{ url_for('admin.selectCdel',xh = v.xh, kh = v.kh, semester = v.semester) }}"  onclick="delete_confirm()" class="label label-danger" style="color: white;border:0;">删除</a>
+                                    </td>
+                                </tr>
+                            {{ xadd() }}
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                        <div class="dataTables_paginate">
+                            {{ pg.pages(page_data, 'admin.selectCsetting') }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">添加新选课</h3>
+                        <div class="actions pull-right">
+                            <i class="fa fa-chevron-down"></i>
+                        </div>
+                    </div>
+                    <div class="panel-body">
+                        <div class="panel-body">
+                            <form class="bs-example bs-example-form" role="form" method="POST">
+                                <table id="table" class="table table-striped">
+                                    <thead>
+                                    <tr>
+                                        <th>{{ form.xh.label }}</th>
+                                        <th>{{ form.kh.label }}</th>
+                                        <th>{{ form.semester.label }}</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>{{ form.xh }}</td>
+                                            <td>{{ form.kh }}</td>
+                                            <td>{{ form.semester }}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <div style = "text-align:right;padding-right:15px" >
+                                    {{ form.submit }}
+                                    {{ form.csrf_token }}
+                                </div>
+                            </form>
+                        </div>    
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}
+
+{% block js %}
+    <script>
+        document.onclick = function delete_confirm() 
+        {
+            if (event.srcElement.outerText == "删除") 
+            {
+                event.returnValue = confirm("删除后数据无法撤销，你确认要删除吗？");
+            }
+        }
+    </script>
+{% endblock %}

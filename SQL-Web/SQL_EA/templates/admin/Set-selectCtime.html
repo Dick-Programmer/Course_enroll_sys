@@ -1,0 +1,109 @@
+{% extends "admin/admin-base.html" %}
+{% import "UI/pages.html" as pg %}
+
+{% block css %}
+<link rel="stylesheet" href="{{ url_for('static',filename='plugins/dataTables/css/dataTables.css') }}">
+<link rel="stylesheet" href="{{ url_for('static',filename='plugins/bootstrap/css/bootstrap-datetimepicker.min.css') }}"  media="screen">
+{% endblock %}
+
+{% block content %}
+    <section id="main-content">
+        <div class="row">
+            <div class="col-md-12">
+                <ul class="breadcrumb">
+                    <li>{{ seme.semester }}</li>
+                    <li>{{ seme.weeks }}</li>
+                </ul>
+                <h2 class="h2">选课时间</h2>
+            </div>
+        </div>
+        {% for msg in get_flashed_messages() %}
+        <!-- category_filter=["ok"] -->
+        <script>
+            alert("{{msg}}")
+        </script>
+        {% endfor %}
+        <div class="row">
+            <div class="col-md-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">时间设置</h3>
+                    </div>
+                    <div class="panel-body">
+                        <h4>-*当前设置*-</h4>
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>学期</th>
+                                    <th>开始时间</th>
+                                    <th>结束时间</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>{{ nowsel.semester }}</td>
+                                    <td>{{ nowsel.begin }}</td>
+                                    <td>{{ nowsel.end }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <h4>-*修改设置*-</h4>
+                        <form class="bs-example bs-example-form" role="form" method="POST">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>{{ form.semester.label }}</th>
+                                        <th>{{ form.begin.label }}</th>
+                                        <th>{{ form.end.label }}</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>{{ form.semester }}</td>
+                                        <td>
+                                            <div  id="begin_time" class="input-group date form_datetime" data-date="2018-01-01T15:25:00Z" data-date-format="dd MM yyyy - HH:ii p" data-link-field="dtp_input1">
+                                                <input class="form-control" size="16" type="text" value="" readonly>
+                                                <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+                                                <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
+                                            </div>
+                                            {{ form.begin }}
+                                        </td>
+                                        <td>
+                                            <div  id="end_time" class="input-group date form_datetime" data-date="2018-01-01T15:25:00Z" data-date-format="dd MM yyyy - HH:ii p" data-link-field="dtp_input1">
+                                                <input class="form-control" size="16" type="text" value="" readonly>
+                                                <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+                                                <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
+                                            </div>
+                                            {{ form.end }}
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <div style = "text-align:right;padding-right:15px" >
+                                {{ form.submit }}
+                                {{ form.csrf_token }}
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}
+
+{% block js %}
+    <script type="text/javascript" src="{{ url_for('static',filename='plugins/bootstrap/js/bootstrap-datetimepicker.js') }}" charset="UTF-8"></script>
+    <script type="text/javascript" src="{{ url_for('static',filename='plugins/bootstrap/js/bootstrap-datetimepicker.fr.js') }}" charset="UTF-8"></script>
+    <script>
+        $("#begin_time").datetimepicker({
+            format: "dd MM yyyy - hh:ii",
+            linkField: "begin",
+            linkFormat: "yyyy-mm-dd hh:ii"
+        });
+        $("#end_time").datetimepicker({
+            format: "dd MM yyyy - hh:ii",
+            linkField: "end",
+            linkFormat: "yyyy-mm-dd hh:ii"
+        });
+    </script>
+{% endblock %}

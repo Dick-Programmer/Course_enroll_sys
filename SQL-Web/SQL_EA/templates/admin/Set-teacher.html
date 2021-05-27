@@ -1,0 +1,206 @@
+{% extends "admin/admin-base.html" %}
+{% import "UI/pages.html" as pg %}
+
+{% block css %}
+    <link rel="stylesheet" href="{{ url_for('static',filename='plugins/dataTables/css/dataTables.css') }}">
+    <style>
+        .input{padding:0;margin:0;height:100%;width:100%;border:0px;border-radius:5px}
+    </style>
+{% endblock %}
+
+{% block content %}
+    <section id="main-content">
+        <div class="row">
+            <div class="col-md-12">
+                <ul class="breadcrumb">
+                    <li>{{ seme.semester }}</li>
+                    <li>{{ seme.weeks }}</li>
+                </ul>
+                <h2 class="h2">教师信息</h2>
+            </div>
+        </div>
+        {% for msg in get_flashed_messages() %}
+        <!-- category_filter=["ok"] -->
+        <script>
+            alert("{{msg}}")
+        </script>
+        {% endfor %}
+        <div class="row">
+            <div class="col-md-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">教师</h3>
+                    </div>
+                    <div class="panel-body">
+                        <table id="table" class="table table-striped">
+                            <thead>
+                            <tr>
+                                <th>工号</th>
+                                <th>姓名</th>
+                                <th>性别</th>
+                                <th>生日</th>
+                                <th>职位</th>
+                                <th>基本工资</th>
+                                <th>所属学院</th>
+                                <th>操作</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {{ xzero() }}
+                            {% for v in page_data.items %}
+                                <tr>
+                                    <td>{{ v.Teacher.gh }}</td>
+                                    <td>{{ v.Teacher.name }}</td>
+                                    <td>{{ v.Teacher.sex }}</td>
+                                    <td>{{ v.Teacher.birthday }}</td>
+                                    <td>{{ v.Teacher.education }}</td>
+                                    <td>{{ v.Teacher.salary }}</td>
+                                    <td>{{ v.College.name }}</td>
+                                    <td>
+                                        <button onclick="update(this,'{{getx()}}')" class="label label-info" style="color: white; border:0;height: 18px;">编辑</button>
+                                        <a href="{{ url_for('admin.teacherdel',gh = v.Teacher.gh) }}"  onclick="delete_confirm()" class="label label-danger" style="color: white;border:0;">删除</a>
+                                    </td>
+                                </tr>
+                                {{ xadd() }}
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                        <div class="dataTables_paginate">
+                            {{ pg.pages(page_data, 'admin.teachersetting') }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">添加新教师</h3>
+                        <div class="actions pull-right">
+                            <i class="fa fa-chevron-down"></i>
+                        </div>
+                    </div>
+                    <div class="panel-body">
+                        <div class="panel-body">
+                            <form class="bs-example bs-example-form" role="form" method="POST">
+                                <table id="table" class="table table-striped">
+                                    <thead>
+                                    <tr>
+                                        <th>{{ form.gh.label }}</th>
+                                        <th>{{ form.name.label }}</th>
+                                        <th>{{ form.sex.label }}</th>
+                                        <th>{{ form.birthday.label }}</th>
+                                        <th>{{ form.education.label }}</th>
+                                        <th>{{ form.salary.label }}</th>
+                                        <th>{{ form.college.label }}</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>{{ form.gh }}</td>
+                                            <td>{{ form.name }}</td>
+                                            <td>{{ form.sex }}</td>
+                                            <td>{{ form.birthday }}</td>
+                                            <td>{{ form.education }}</td>
+                                            <td>{{ form.salary }}</td>
+                                            <td>{{ form.college }}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <div style = "text-align:right;padding-right:15px" >
+                                    {{ form.submit }}
+                                    {{ form.csrf_token }}
+                                </div>
+                            </form>
+                        </div>    
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}
+
+{% block js %}
+    <script>
+        document.onclick = function delete_confirm() 
+        {
+            if (event.srcElement.outerText == "删除") 
+            {
+                event.returnValue = confirm("删除后数据无法撤销，你确认要删除吗？");
+            }
+        }
+        function update(obj,x){
+            var table = document.getElementById("table");
+            var origin =[];
+            for(var i=0;i<table.rows[x].cells.length-1;i++){                
+                text = table.rows[x].cells[i].innerHTML;
+                origin.push(text);
+                table.rows[x].cells[i].innerHTML = '<input class="input" name="input'+ x + '" type="text" value=""/>';
+                var input = document.getElementsByName("input" + x);
+                input[i].value = text;
+                input[0].focus();
+                input[0].select();
+            }
+            obj.innerHTML = "确定";
+            obj.onclick = function onclick(event) {
+                update_success(this,x,origin)
+            };
+        }
+        function update_success(obj,x,origin){
+            var arr = [];
+            var table = document.getElementById("table");
+            var input = document.getElementsByName("input" + x);
+            for(var i=0;i<table.rows[x].cells.length-1;i++){
+                var text = input[i].value;
+                arr.push(text);
+            }
+            $.ajax({
+                url : "{{ url_for('admin.editteacher') }}",
+                type: "POST",
+                data: JSON.stringify({
+                    "origin":origin[0],
+                    "gh": arr[0],
+                    "name": arr[1],
+                    "sex": arr[2],
+                    "birthday": arr[3],
+                    "education": arr[4],
+                    "salary": arr[5],
+                    "college": arr[6]
+                }),
+                contentType: "application/json",
+                dataType: "json",
+                success: function(data){
+                    var result = data.result
+                    if (result != 'SUCC'){
+                        //把值复原给表格
+                        for(var j=0;j<arr.length;j++){
+                            table.rows[x].cells[j].innerHTML = origin[j];
+                        }
+                        //回到原来状态
+                        obj.innerHTML = "编辑";
+                        obj.onclick = function onclick(event) {
+                                    update(this,x)
+                                    };
+                        if(result == 'ERR1')
+                            confirm("修改后数据主键重复，修改失败！")
+                        else
+                            confirm("修改失败！数据已恢复原来状态。")
+                        
+                    } else {
+                        //把修改后的值赋值给表格，不能在取值的时候给，会打乱input的个数
+                        for(var j=0;j<arr.length;j++){
+                            table.rows[x].cells[j].innerHTML = arr[j];
+                        }
+                        //回到原来状态
+                        obj.innerHTML = "编辑";
+                        obj.onclick = function onclick(event) {
+                                    update(this,x)
+                                    };
+                        alert("["+arr + "]\n修改操作成功");
+                    }
+                    }
+            })
+        }
+    </script>
+{% endblock %}

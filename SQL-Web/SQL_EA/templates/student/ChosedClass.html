@@ -1,0 +1,123 @@
+{% extends "student/student-base.html" %}
+{% import "UI/Twopages1.html" as pg %}
+{% import "UI/Twopages1.html" as pg2 %}
+
+{% block css %}
+    <link rel="stylesheet" href="{{ url_for('static',filename='plugins/dataTables/css/dataTables.css') }}">
+{% endblock %}
+
+{% block content %}
+    <section id="main-content">
+        <div class="row">
+            <div class="col-md-12">
+                <ul class="breadcrumb">
+                    <li>{{ seme.semester }}</li>
+                    <li>{{ seme.weeks }}</li>
+                </ul>
+                <h2 class="h2">已选课程</h2>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">当前课程</h3>
+                    </div>
+                    <div class="panel-body">
+                        <table class="table table-striped">
+                            <thead>
+                            <tr>
+                                <th>学期</th>
+                                <th>课程号</th>
+                                <th>课程</th>
+                                <th>教师</th>
+                                <th>学分</th>
+                                <th>学时</th>
+                                <th>上课时间</th>
+                                <th>所属学院</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for v in page_data.items %}
+                                <tr>
+                                    <td>{{ v.SelectC.semester }}</td>
+                                    <td>{{ v.SelectC.kh }}</td>
+                                    <td>{{ v.Course.name }}</td>
+                                    <td>{{ v.Teacher.name }}</td>
+                                    <td>{{ v.Course.credit }}</td>
+                                    <td>{{ v.Course.period }}</td>
+                                    <td>{{ v.Class.class_time }}</td>
+                                    <td>{{ v.College.name }}</td>
+                                </tr>
+                                </tbody>
+                            {% endfor %}
+                        </table>
+                        <div class="dataTables_paginate">
+                            {{ pg.pages(page_data, 'student.ChosedClassList') }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">所有课程</h3>
+                    </div>
+                    <div class="panel-body">
+                        <form class="bs-example bs-example-form" role="form" method="POST">
+                        <table>
+                            <td>{{ form.semester.label }}</td>
+                            <td>{{ form.semester }}</td>
+                            <td>&emsp;&emsp;&emsp;&emsp;</td>
+                            <td>
+                                {{ form.submit}}
+                                {{ form.csrf_token }}
+                            </td>
+                        </table>
+                        </form>
+                        <br>
+                        <table class="table table-striped">
+                            <thead>
+                            <tr>
+                                <th>学期</th>
+                                <th>课程号</th>
+                                <th>课程</th>
+                                <th>教师</th>
+                                <th>学分</th>
+                                <th>学时</th>
+                                <th>上课时间</th>
+                                <th>所属学院</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for v in page_course.items %}
+                                <tr>
+                                    <td>{{ v.SelectC.semester }}</td>
+                                    <td>{{ v.SelectC.kh }}</td>
+                                    <td>{{ v.Course.name }}</td>
+                                    <td>{{ v.Teacher.name }}</td>
+                                    <td>{{ v.Course.credit }}</td>
+                                    <td>{{ v.Course.period }}</td>
+                                    <td>{{ v.Class.class_time }}</td>
+                                    <td>{{ v.College.name }}</td>
+                                </tr>
+                                </tbody>
+                            {% endfor %}
+                        </table>
+                        <div class="dataTables_paginate">
+                            {{ pg2.pages(page_course, 'student.ChosedClassList') }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}
+
+{% block js %}
+    <script src="{{ url_for('static',filename='plugins/dataTables/js/jquery.dataTables.js') }}"></script>
+    <script src="{{ url_for('static',filename='plugins/dataTables/js/dataTables.bootstrap.js') }}"></script>
+{% endblock %}

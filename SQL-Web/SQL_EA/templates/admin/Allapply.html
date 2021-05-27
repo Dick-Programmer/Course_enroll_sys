@@ -1,0 +1,73 @@
+{% extends "admin/admin-base.html" %}
+
+{% block css %}
+{% endblock %}
+
+{% block content %}
+    <section id="main-content">
+        <div class="row">
+            <div class="col-md-12">
+                <ul class="breadcrumb">
+                    <li>{{ seme.semester }}</li>
+                    <li>{{ seme.weeks }}</li>
+                </ul>
+            </div>
+        </div>
+        {% for msg in get_flashed_messages() %}
+        <!-- category_filter=["ok"] -->
+        <script>
+            alert("{{msg}}")
+        </script>
+        {% endfor %}
+        <div class="row">
+            {% for v in apc.apc %}
+            {% if v.ApplyCourse.status==0 %}
+            <div class="col-md-12">
+                <a href="{{ url_for('admin.applydetail',gh = v.ApplyCourse.gh,name= v.ApplyCourse.name) }}">
+                <div class="panel panel-solid-info">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">{{ v.ApplyCourse.name }}</h3>
+                    </div>
+                    <div class="panel-body">
+                        {% if v.Teacher.sex == "女" %}
+                        <img src="{{ url_for('static',filename='img/userwoman.png') }}" alt="" class="img-circle" height="50px">
+                        {% else %}
+                        <img src="{{ url_for('static',filename='img/userman.png') }}" alt="" class="img-circle" height="50px">
+                        {% endif %} 
+                        <strong style="font-size:20px">{{ v.Teacher.name }}</strong>
+                        <span>工号：{{ v.Teacher.gh }}  Apply for Course</span>    
+                    </div>
+                    <div class="panel-footer">{{ v.ApplyCourse.time }}</div>
+                </div>
+                </a>
+            </div>
+            {% endif %}
+            {% endfor %}
+            {% for v in apc.apc %}
+            {% if v.ApplyCourse.status!=0 %}
+            <div class="col-md-12">
+                <a href="{{ url_for('admin.applydetail',gh = v.ApplyCourse.gh,name= v.ApplyCourse.name) }}">
+                <div class="panel panel-solid-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">{{ v.ApplyCourse.name }}</h3>
+                    </div>
+                    <div class="panel-body">
+                        {% if v.Teacher.sex == "女" %}
+                        <img src="{{ url_for('static',filename='img/userwoman.png') }}" alt="" class="img-circle" height="50px">
+                        {% else %}
+                        <img src="{{ url_for('static',filename='img/userman.png') }}" alt="" class="img-circle" height="50px">
+                        {% endif %} 
+                        <strong style="font-size:20px">{{ v.Teacher.name }}</strong>
+                        <span>工号：{{ v.Teacher.gh }}  Apply for Course</span>          
+                    </div>
+                </div>
+                </a>
+            </div>
+            {% endif %}
+            {% endfor %}
+        </div>
+    </section>
+{% endblock %}
+
+{% block js %}
+{% endblock %}

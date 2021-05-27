@@ -1,0 +1,56 @@
+{% extends "admin/admin-base.html" %}
+
+{% block content %}
+    <section id="main-content">
+        <div class="row">
+            <div class="col-md-12">
+                <ul class="breadcrumb">
+                    <li>{{ seme.semester }}</li>
+                    <li>{{ seme.weeks }}</li>
+                </ul>
+            </div>
+        </div>
+        {% for msg in get_flashed_messages() %}
+        <!-- category_filter=["ok"] -->
+        <script>
+            alert("{{msg}}")
+        </script>
+        {% endfor %}
+        <div class="row">
+            <div class="col-md-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">发布新通知</h3>
+                        <div class="actions pull-right">
+                            <i class="fa fa-chevron-down"></i>
+                        </div>
+                    </div>
+                    <div class="panel-body">
+                        <form class="bs-example bs-example-form" role="form" method="POST">
+                            {{ form.title.label }}
+                            {{ form.title }}
+                            {{ form.editor1 }}
+                            <div style = "text-align:right;padding-right:15px" >
+                                {{ form.csrf_token }}
+                                {{ form.submit }}
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}
+
+{% block js %}
+    <script src="{{ url_for('static',filename='plugins/bootstrap-wysihtml5/js/wysihtml5-0.3.0.js') }}"></script>
+    <script src="{{ url_for('static',filename='plugins/bootstrap-wysihtml5/js/bootstrap3-wysihtml5.js') }}"></script>
+    <script type="text/javascript"  src="{{ url_for('static',filename='plugins/ckeditor/ckeditor.js') }}"></script>
+    <script>
+    $(document).ready(function() {
+        $('.textarea').wysihtml5();
+
+        CKEDITOR.replace('editor1');
+    });
+    </script>
+{% endblock %}

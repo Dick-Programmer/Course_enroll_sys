@@ -1,0 +1,61 @@
+﻿<!DOCTYPE>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>登陆</title>
+
+    <link rel="stylesheet" href="{{ url_for('static',filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static',filename='plugins/bootstrap/css/bootstrap.min.css') }}">
+    <script src="{{ url_for('static',filename='js/jquery-1.10.2.min.js') }}"></script>
+    <script src="{{ url_for('static',filename='plugins/bootstrap/js/bootstrap.min.js') }}"></script>
+    <!-- <link rel="stylesheet" href="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="http://cdn.static.runoob.com/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/js/bootstrap.min.js"></script> -->
+</head>
+
+<body>
+<div class="box">
+    <div class="cnt">
+        <p id="huanying"><span id="cnt_one">欢迎登录</span>
+        <div><br></div>
+        <div>
+            {% for msg in get_flashed_messages() %}
+                <script>
+                    alert("用户名或密码有误！")
+                </script>
+            {% endfor %}
+            <form class="bs-example bs-example-form" role="form" method="POST">
+                <div class="input-group">
+                    <span class="input-group-addon"><img src="{{ url_for('static',filename='img/usr-2.png') }}"></span>
+                    {{ form.account }}
+                </div>
+                {% for err in form.account.errors %}
+                <script>
+                    confirm("{{ err }}")
+                </script>
+                {% endfor %}
+                <br>
+                <div class="input-group">
+                    <span class="input-group-addon"><img src="{{ url_for('static',filename='img/pwd-2.png') }}"></span>
+                    {{ form.pwd }}
+                </div>
+                <br>
+                <p style="color: gray">&nbsp;&nbsp;*温馨提示：初始密码为您的工号/学号<br/>&emsp;如忘记密码请联系系统管理员更改</p>
+                <div style="margin-top:40px;">
+                    {{ form.submit }}
+                    {{ form.csrf_token }}
+                </div>
+            </form>
+        </div>
+
+    </div>
+</div>
+<hr>
+<div class="copyright">
+    <center><span style="color: gray">@本站作者：Leopoldo&nbsp;&nbsp;&nbsp;&nbsp;</span><a href="mailto:leo_lsz@icloud.com"style="color: black">与我联系</a>
+    </center>
+    <center>( ﹁ ﹁ ) ~→</center>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,181 @@
+{% extends "teacher/teacher-base.html" %}
+{% block css %}
+<link rel="stylesheet" href="{{ url_for('static',filename='plugins/dataTables/css/dataTables.css') }}">
+{% endblock %}
+
+{% block content %}
+    <section id="main-content">
+        <div class="row">
+            <div class="col-md-12">
+                <ul class="breadcrumb">
+                    <li>{{ seme.semester }}</li>
+                    <li>{{ seme.weeks }}</li>
+                </ul>
+                <h2 class="h2">{{ cla.Class.semester }} / {{ cla.Course.name }}</h2>
+            </div>
+        </div>
+        {% for msg in get_flashed_messages() %}
+        <!-- category_filter=["ok"] -->
+        <script>
+            alert("{{msg}}")
+        </script>
+        {% endfor %}
+        <div class="row">
+            <div class="col-md-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">课程数据分析</h3>
+                    </div>
+                    <div class="panel-body">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>人数</th>
+                                    <th>及格人数</th>
+                                    <th>不及格人数</th>
+                                    <th>优秀人数</th>
+                                    <th>及格率</th>
+                                    <th>优秀率</th>
+                                    <th>平均成绩</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>{{ cladetail.count }}</td>
+                                    <td>{{ cladetail.passed }}</td>
+                                    <td>{{ cladetail.failed }}</td>
+                                    <td>{{ cladetail.excellent }}</td>
+                                    <td>{{ cladetail.passrate }}</td>
+                                    <td>{{ cladetail.exrate }}</td>
+                                    <td>{{ cladetail.pj }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">课程详情</h3>
+                    </div>
+                    <div class="panel-body">
+                        <p>学生名单/成绩</p>
+                        <table id="table" class="table table-striped">
+                            <thead>
+                            <tr>
+                                <th>学号</th>
+                                <th>姓名</th>
+                                <th>平时成绩</th>
+                                <th>考试成绩</th>
+                                <th>总评成绩</th>
+                                {% if cla.Class.semester == seme.semester %}
+                                <th>操作</th>
+                                {% endif %}
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {{ xzero() }}
+                            {% for v in page_data %}
+                                <tr>
+                                    <td>{{ v.SelectC.xh }}</td>
+                                    <td>{{ v.Student.name }}</td>
+                                    <td>{{ v.SelectC.pscj }}</td>
+                                    <td>{{ v.SelectC.kscj }}</td>
+                                    <td>{{ v.SelectC.zpcj }}</td>
+                                    {% if cla.Class.semester == seme.semester %}
+                                    <td>
+                                        <button onclick="update(this,'{{getx()}}','{{ cla.Class.semester }}','{{ cla.Class.kh }}')" class="label label-info" style="color: white; border:0;height: 18px;">修改成绩</button>
+                                    </td>
+                                    {{ xadd() }}
+                                    {% endif %}
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}
+
+{% block js %}
+<script>
+    function update(obj,x,seme,kh){
+            var table = document.getElementById("table");
+            var origin =[],arr =[];
+            for(var i=0;i<table.rows[x].cells.length-1;i++){     
+                text = table.rows[x].cells[i].innerHTML;           
+                origin.push(text);
+                arr.push(text);  
+            }
+            text = table.rows[x].cells[2].innerHTML;
+            table.rows[x].cells[2].innerHTML = '<input class="input" name="input'+ x + '" type="number" min="0" max="100" style="width:50px;" value=""/>';
+            var input = document.getElementsByName("input" + x);
+            input[0].value = origin[2];
+            text = table.rows[x].cells[3].innerHTML;
+            table.rows[x].cells[3].innerHTML = '<input class="input" name="input'+ x + '" type="number" min="0" max="100" style="width:50px;" value=""/>';
+            var input = document.getElementsByName("input" + x);
+            input[1].value = origin[3];
+            input[0].focus();
+            input[0].select();
+            obj.innerHTML = "确定";
+            obj.onclick = function onclick(event) {
+                update_success(this,x,origin,arr,seme,kh)
+            };
+        }
+        function update_success(obj,x,origin,arr,seme,kh){
+            var table = document.getElementById("table");
+            var input = document.getElementsByName("input" + x);
+            arr[2] = input[0].value;
+            arr[3] = input[1].value;
+            $.ajax({
+                url : "{{ url_for('teacher.editgrade') }}",
+                type: "POST",
+                data: JSON.stringify({
+                    "seme":seme,
+                    "kh": kh,
+                    "xh": arr[0],
+                    "pscj": arr[2],
+                    "kscj": arr[3]
+                }),
+                contentType: "application/json",
+                dataType: "json",
+                success: function(data){
+                    var result = data.result
+                    if (result != 'SUCC'){
+                        //把值复原给表格
+                        table.rows[x].cells[2].innerHTML = origin[2];
+                        table.rows[x].cells[3].innerHTML = origin[3];
+                        table.rows[x].cells[4].innerHTML = origin[4];
+                        //回到原来状态
+                        obj.innerHTML = "修改成绩";
+                        obj.onclick = function onclick(event) {
+                                    update(this,x,seme,kh)
+                                    };
+                        if(result == 'ERR1')
+                            confirm("修改后数据主键重复，修改失败！")
+                        else
+                            confirm("修改失败！数据已恢复原来状态。")
+                        
+                    } else {
+                        //把修改后的值赋值给表格，不能在取值的时候给，会打乱input的个数
+                        arr[4] = data.zpcj;
+                        table.rows[x].cells[2].innerHTML = arr[2];
+                        table.rows[x].cells[3].innerHTML = arr[3];
+                        table.rows[x].cells[4].innerHTML = arr[4];
+                        //回到原来状态
+                        obj.innerHTML = "修改成绩";
+                        obj.onclick = function onclick(event) {
+                                    update(this,x,seme,kh)
+                                    };
+                        alert("["+arr + "]\n修改操作成功");
+                    }
+                    }
+            })
+        }
+</script>
+{% endblock %}

@@ -1,0 +1,56 @@
+{% extends "admin/admin-base.html" %}
+
+{% block css %}
+{% endblock %}
+
+{% block content %}
+    <section id="main-content">
+        <div class="row">
+            <div class="col-md-12">
+                <ul class="breadcrumb">
+                    <li>{{ seme.semester }}</li>
+                    <li>{{ seme.weeks }}</li>
+                </ul>
+            </div>
+        </div>
+        {% for msg in get_flashed_messages() %}
+        <!-- category_filter=["ok"] -->
+        <script>
+            alert("{{msg}}")
+        </script>
+        {% endfor %}
+        <div class="row">
+            <div class="col-md-12" id="view-mail-wrapper">
+                <div class="panel">
+                    <div class="panel-body">
+                        <header>
+                            <h2 style="color: #000;">{{ inf.title }}</h2>
+                            <p class="pull-right">{{ inf.gh }}, {{ inf.time }}</p>
+                            <div class="actions pull-right">
+                                <a href="{{ url_for('admin.informdel',gh = inf.gh, title = inf.title) }}"  onclick="delete_confirm()">
+                                    <strong>X</strong>
+                                </a>
+                            </div>
+                        </header>
+                            <div class="col-md-12 ">
+                                {% autoescape false %}
+                                <p style="color: white">{{ inf.detail }}</p>
+                                {% endautoescape %}
+                            </div>
+                        <hr>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}
+
+{% block js %}
+<script>
+    document.onclick = function delete_confirm() 
+    {
+        if (event.srcElement.outerText == "X") 
+            event.returnValue = confirm("删除后数据无法撤销，你确认要删除吗？");
+    }
+</script>
+{% endblock %}

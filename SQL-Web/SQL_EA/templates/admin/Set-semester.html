@@ -1,0 +1,90 @@
+{% extends "admin/admin-base.html" %}
+{% import "UI/pages.html" as pg %}
+
+{% block css %}
+{% endblock %}
+
+{% block content %}
+    <section id="main-content">
+        <div class="row">
+            <div class="col-md-12">
+                <ul class="breadcrumb">
+                    <li>{{ seme.semester }}</li>
+                    <li>{{ seme.weeks }}</li>
+                </ul>
+                <h2 class="h2">学期</h2>
+            </div>
+        </div>
+        {% for msg in get_flashed_messages() %}
+        <!-- category_filter=["ok"] -->
+        <script>
+            alert("{{msg}}")
+        </script>
+        {% endfor %}
+        <div class="row">
+            <div class="col-md-6">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">修改当前学期</h3>
+                    </div>
+                    <div class="panel-body">
+                        <form class="bs-example bs-example-form" role="form" method="POST">
+                            <table id="table" class="table table-striped">
+                                <thead>
+                                <tr>
+                                    <th>{{ form.semester.label }}</th>
+                                    <th>{{ form.weeks.label }}</th>
+                                    <th>{{ form.submit.label }}</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>{{ form.semester }}</td>
+                                        <td>{{ form.weeks }}</td>
+                                        <td>
+                                            {{ form.csrf_token }}
+                                            {{ form.submit }}
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">添加新学期</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="panel-body">
+                            <form class="bs-example bs-example-form" role="form" method="POST">
+                                <table id="table" class="table table-striped">
+                                    <thead>
+                                    <tr>
+                                        <th>{{ form2.studyyears.label }}</th>
+                                        <th>{{ form2.submit.label }}</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>{{ form2.studyyears }}</td>
+                                            <td>
+                                                {{ form2.csrf_token }}
+                                                {{ form2.submit }}
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </form>
+                        </div>    
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}
+
+{% block js %}
+{% endblock %}

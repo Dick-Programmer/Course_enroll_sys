@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html class="no-js">
+<!--<![endif]-->
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>教学事务管理系统</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+    <!-- Bootstrap CSS -->
+    <!-- <link rel="stylesheet" href="//cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap.min.css"> -->
+    <link rel="stylesheet" href="{{ url_for('static',filename='plugins/bootstrap/css/bootstrap.min.css') }}">
+    <!-- <script src="//cdn.bootcss.com/jquery/1.11.3/jquery.min.js"></script> -->
+    <script src="{{ url_for('static',filename='js/jquery-1.10.2.min.js') }}"></script>
+    <!-- <script src="//cdn.bootcss.com/bootstrap/3.3.5/js/bootstrap.min.js"></script> -->
+    <script src="{{ url_for('static',filename='plugins/bootstrap/js/bootstrap.min.js') }}"></script>
+    <script src="{{ url_for('static',filename='js/application.js') }}"></script>
+    <!-- Fonts from Font Awsome -->
+    <link rel="stylesheet" href="{{ url_for('static',filename='css/font-awesome/css/font-awesome.min.css') }}">
+    <!-- CSS Animate -->
+    <link rel="stylesheet" href="{{ url_for('static',filename='css/animate.css') }}">
+    <!-- Custom styles for this theme -->
+    <link rel="stylesheet" href="{{ url_for('static',filename='css/main.css') }}">
+    <!-- Drop-down -->
+    <link rel="stylesheet" href="{{ url_for('static',filename='css/drop-down.css') }}" />
+    <!-- Pagelevel CSS -->
+    {% block css %}
+    {% endblock %}
+    <!-- Feature detection -->
+    <script src="{{ url_for('static',filename='js/modernizr-2.6.2.min.js') }}"></script>
+</head>
+
+<body>
+<section id="container">
+    <header id="header">
+        <!--logo start-->
+        <div class="brand">
+            <a href="{{ url_for('student.index') }}" class="logo">
+                <span>教务管理系统</span></a>
+        </div>
+        <!--logo end-->
+        <div class="toggle-navigation toggle-left">
+            <button type="button" class="btn btn-default" id="toggle-left" data-toggle="tooltip" data-placement="right"
+                    title="隐藏侧边栏">
+                <i class="fa fa-bars"></i>
+            </button>
+        </div>
+        <div class="user-nav">
+            <ul>
+                <li class="dropdown messages">
+                    <span class="badge badge-danager animated bounceIn" id="new-messages">1</span>
+                    <button type="button" class="btn btn-default dropdown-toggle options" id="toggle-mail"
+                            data-toggle="dropdown">
+                        <i class="fa fa-envelope"></i>
+                    </button>
+                    <ul class="dropdown-menu alert animated fadeInDown">
+                        <li>
+                            <h1>你有
+                                <strong> 1 </strong>条未读消息！</h1>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <div class="profile-photo">
+                                    <img src="{{ url_for('static',filename='img/userwoman.png') }}" class="img-circle"
+                                         height="50px">
+                                </div>
+                                <div class="message-info">
+                                    <span class="sender">XXX</span>
+                                    <span class="time"> 14:30</span>
+                                    <div class="message-content">今天下午4点来我办公室一趟.</div>
+                                </div>
+                            </a>
+                        </li>
+
+                        <li><a href="#">查看所有消息</a>
+                        </li>
+                    </ul>
+                </li>
+
+                <li class="profile-photo">
+                    {% if user.sex == "女" %}
+                        <img src="{{ url_for('static',filename='img/usergirl.png') }}" alt="" class="img-circle" height="30px">
+                    {% else %}
+                        <img src="{{ url_for('static',filename='img/userboy.png') }}" alt="" class="img-circle" height="30px">
+                    {% endif %}
+                </li>
+                <li class="dropdown settings">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                        &emsp;{{ user.name }}<i class="fa fa-angle-down"></i>
+                    </a>
+                    <ul class="dropdown-menu animated fadeInDown">
+                        <li>
+                            <a href="{{ url_for('student.userinfo') }}"><i class="fa fa-user-o fa-fw"></i> 个人信息 </a>
+                        </li>
+                        <li>
+                            <a href="{{ url_for('student.settings') }}"><i class="fa fa-cog fa-fw"></i> 设&emsp;&emsp;置
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#"><i class="fa fa-envelope fa-fw"></i> 消&emsp;&emsp;息 <span
+                                    class="badge badge-danager" id="user-inbox">1</span></a>
+                        </li>
+                        <li>
+                            <a href="{{ url_for('student.logout') }}"><i class="fa fa-power-off fa-fw"></i> 注&emsp;&emsp;销
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <img src="{{ url_for('static',filename='img/sun.gif') }}" alt="" height="40px">
+                </li>
+
+            </ul>
+        </div>
+    </header>
+    <!--sidebar start-->
+    <aside class="sidebar">
+        <div id="leftside-navigation" class="nano">
+            <ul class="nano-content">
+                <li class="sub-menu active">
+                    <a href="{{ url_for('student.index') }}"><span>首页</span></a>
+                </li>
+                <li class="sub-menu">
+                    <a href="javascript:void(0);"><span>课程管理</span><i
+                            class="arrow fa fa-angle-right pull-right"></i></a>
+                    <ul>
+                        <li><a href="{{ url_for('student.ChosedClassList',page = 1,page2 = 1) }}">已选课程</a>
+                        </li>
+                        <li><a href="{{ url_for('student.Gradedetail',page = 1) }}">成绩查询</a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="sub-menu">
+                    <a href="{{ url_for('student.selectclass',page = 1) }}">课程查询(选/退课)</a>
+                </li>
+                <li class="sub-menu">
+                    <a href="javascript:void(0);"><span>待定</span><i class="arrow fa fa-angle-right pull-right"></i></a>
+                    <ul>
+                        <li><a href="#">待定</a>
+                        </li>
+                        <li><a href="#">待定</a>
+                        </li>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+
+    </aside>
+    <!--sidebar end-->
+    <!--main content start-->
+    <section class="main-content-wrapper">
+        {% block content %}
+        {% endblock %}
+    </section>
+    <!--main content end-->
+
+</section>
+<!--Global JS-->
+<!-- <script src="{{ url_for('static',filename='plugins/waypoints/waypoints.min.js') }}"></script> -->
+<script src="{{ url_for('static',filename='plugins/waypoints/waypoints.min.js') }}"></script>
+<script src="{{ url_for('static',filename='plugins/nanoScroller/jquery.nanoscroller.min.js') }}"></script>
+<script src="{{ url_for('static',filename='js/jquery-ui.min.js') }}"></script>
+<script src="{{ url_for('static',filename='js/select-widget-min.js') }}"></script>
+<!-- Vector Map  -->
+<script src="{{ url_for('static',filename='plugins/jvectormap/js/jquery-jvectormap-1.2.2.min.js') }}"></script>
+<script src="{{ url_for('static',filename='plugins/jvectormap/js/jquery-jvectormap-world-mill-en.js') }}"></script>
+<!-- ToDo List  -->
+<!-- <script src="{{ url_for('static',filename='plugins/todo/js/todos.js') }}"></script> -->
+<!--Load these page level functions-->
+<script src="{{ url_for('static',filename='plugins/dataTables/js/jquery.dataTables.js') }}"></script>
+<!--Page Level JS-->
+{% block js %}
+{% endblock %}
+<script type="text/javascript">
+    $(document).ready(function(){		
+        $(".ui-select").selectWidget({
+            change       : function (changes) {
+                return changes;
+            },
+            effect       : "slide",
+            keyControl   : true,
+            speed        : 200,
+            scrollHeight : 250
+        });
+        
+    });		
+</script>
+
+</body>
+</html>

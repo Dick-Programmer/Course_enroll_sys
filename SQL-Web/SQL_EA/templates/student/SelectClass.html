@@ -1,0 +1,159 @@
+{% extends "student/student-base.html" %}
+{% import "UI/pages.html" as pg %}
+
+{% block css %}
+    <link rel="stylesheet" href="{{ url_for('static',filename='plugins/dataTables/css/dataTables.css') }}">
+{% endblock %}
+
+{% block content %}
+    <section id="main-content">
+        <div class="row">
+            <div class="col-md-12">
+                <ul class="breadcrumb">
+                    <li>{{ seme.semester }}</li>
+                    <li>{{ seme.weeks }}</li>
+                </ul>
+                <h2 class="h2">{{ selseme }}</h2>
+            </div>
+        </div>
+        {% for msg in get_flashed_messages() %}
+        <!-- category_filter=["ok"] -->
+        <script>
+            alert("{{msg}}")
+        </script>
+        {% endfor %}
+        <div class="row">
+            <div class="col-md-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">查找课程</h3>
+                    </div>
+                    <div class="panel-body">
+                        <form class="bs-example bs-example-form" role="form" method="POST">
+                            <table>
+                                <td>{{ form.select.label }}</td>
+                                <td>{{ form.select }}</td>
+                                <td>&emsp;&emsp;&emsp;&emsp;</td>
+                                <td>{{ form.match.label }}</td>
+                                <td>{{ form.match }}</td>
+                                <td>&emsp;&emsp;&emsp;&emsp;</td>
+                                <td>
+                                    {{ form.submit}}
+                                    {{ form.csrf_token }}
+                                </td>
+                            </table>
+                        </form>
+                        <table class="table table-striped">
+                            <thead>
+                            <tr>
+                                <th>学期</th>
+                                <th>课程号</th>
+                                <th>课程</th>
+                                <th>教师</th>
+                                <th>学分</th>
+                                <th>学时</th>
+                                <th>上课时间</th>
+                                <th>所属学院</th>
+                                <th>当前人数</th>
+                                <th>额定人数</th>
+                                {% if select %}
+                                <th>操作</th>
+                                {% endif %}
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for v in page_data.items %}
+                                <tr>
+                                    <td>{{ v.Class.semester }}</td>
+                                    <td>{{ v.Class.kh }}</td>
+                                    <td>{{ v.Course.name }}</td>
+                                    <td>{{ v.Teacher.name }}</td>
+                                    <td>{{ v.Course.credit }}</td>
+                                    <td>{{ v.Course.period }}</td>
+                                    <td>{{ v.Class.class_time }}</td>
+                                    <td>{{ v.College.name }}</td>
+                                    <td>{{ v.Class.nowsize }}</td>
+                                    <td>{{ v.Class.maxsize }}</td>
+                                    {% if select %}
+                                    <td>
+                                        <a href="{{ url_for('student.choseclass',kh = v.Class.kh, name=v.Teacher.name) }}"  onclick="select_confirm()" class="label label-info" style="color: white;border:0;">选课</a>
+                                    </td>
+                                    {% endif %}
+                                </tr>
+                                </tbody>
+                            {% endfor %}
+                        </table>
+                        <div class="dataTables_paginate">
+                            {{ pg.pages(page_data, 'student.selectclass') }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">已选</h3>
+                    </div>
+                    <div class="panel-body">
+                        <table class="table table-striped">
+                            <thead>
+                            <tr>
+                                <th>学期</th>
+                                <th>课程号</th>
+                                <th>课程</th>
+                                <th>教师</th>
+                                <th>学分</th>
+                                <th>学时</th>
+                                <th>上课时间</th>
+                                <th>所属学院</th>
+                                {% if select %}
+                                <th>操作</th>
+                                {% endif %}
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for v in cla %}
+                                <tr>
+                                    <td>{{ v.Class.semester }}</td>
+                                    <td>{{ v.Class.kh }}</td>
+                                    <td>{{ v.Course.name }}</td>
+                                    <td>{{ v.Teacher.name }}</td>
+                                    <td>{{ v.Course.credit }}</td>
+                                    <td>{{ v.Course.period }}</td>
+                                    <td>{{ v.Class.class_time }}</td>
+                                    <td>{{ v.College.name }}</td>
+                                    {% if select %}
+                                    <td>
+                                        <a href="{{ url_for('student.delclass',kh = v.Class.kh, name=v.Teacher.name) }}"  onclick="select_confirm()" class="label label-danger" style="color: white;border:0;">退课</a>
+                                    </td>
+                                    {% endif %}
+                                </tr>
+                                </tbody>
+                            {% endfor %}
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}
+
+{% block js %}
+    <script>
+        document.onclick = function select_confirm() 
+        {
+            if (event.srcElement.outerText == "选课") 
+            {
+                event.returnValue = confirm("确认要选这门课吗？");
+            }
+            else if (event.srcElement.outerText == "退课") 
+            {
+                event.returnValue = confirm("确认要退这门课吗？");
+            }
+        }
+    </script>
+    <script src="{{ url_for('static',filename='plugins/dataTables/js/jquery.dataTables.js') }}"></script>
+    <script src="{{ url_for('static',filename='plugins/dataTables/js/dataTables.bootstrap.js') }}"></script>
+{% endblock %}
